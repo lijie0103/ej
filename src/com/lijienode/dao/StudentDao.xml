@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lijienode.dao.StudentDao">
+    <select id="getById" resultType="student">
+        select * from student where id=#{id}
+    </select>
+    <insert id="save">
+        insert into student(id,name,age) values(#{id},#{name},#{age})
+    </insert>
+    <select id="getAll" resultType="student">
+        select * from student
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultType="student">
+        select * from student where id=#{id}
+    </select>
+    <select id="selectAge" parameterType="int" resultType="student">
+        select * from student where age=#{age}
+    </select>
+    <select id="selectTwo" resultType="student">
+        select * from student where name=#{name} and age=#{age}
+    </select>
+    <select id="selectThree" resultType="student">
+        select * from student where name=#{name} and age=#{age}
+    </select>
+    <select id="selectFour" resultType="student">
+        select * from student where name like '%${value}%'
+    </select>
+    <select id="selectFive" resultType="student">
+        select * from student where name like #{name}
+    </select>
+    <!-- '%' #{name} '%' 空格相当于sql语句连接,不能省略 -->
+    <select id="selectSix" resultType="student">
+        select * from student where name like '%' #{name} '%'
+    </select>
+    <select id="selectSeven" resultType="string">
+        select name from student where id=#{id}
+    </select>
+    <select id="selectEight" resultType="string">
+        select name from student
+    </select>
+    <select id="selectNine" resultType="map">
+        select * from student
+    </select>
+    <!--
+        resultMap:表名和类型属性的一一对应
+        id:主键字段
+        result:普通字段
+    -->
+    <!-- 动态查询 -->
+    <select id="selectTen" resultType="student">
+        select * from student
+        <where>
+            <if test="name != null and name != ''">
+                name like '%' #{name} '%'
+            </if>
+            <if test="address != null and name != ''">
+                and address like '%' #{address} '%'
+            </if>
+        </where>
+    </select>
+    <select id="selectEleven" resultType="student">
+        select * from student where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- sql片段 -->
+    <sql id="sqlOne">
+        select * from student
+    </sql>
+    <select id="selectA" resultType="student">
+        <include refid="sqlOne"/> where id=#{id}
+    </select>
+
+    <select id="select1" resultType="map">
+        select
+        s.name as sname,
+        c.name as cname
+        from student s
+        join classroom c
+        on s.classroomId = c.id
+    </select>
+    <select id="select2" resultType="com.lijienode.vo.StudentAndClassroom">
+        select
+        s.id sid,
+        s.name sname,
+        s.age sage,
+        s.address saddress,
+        c.id cid,
+        c.name cname
+
+        from student s
+        join classroom c
+        on s.classroomId = c.id
+
+    </select>
+    <select id="select3" resultType="com.lijienode.vo.StudentAndClassroom">
+        select
+            s.id sid,
+            s.name sname,
+            s.age sage,
+            s.address saddress,
+            c.id cid,
+            c.name cname
+
+        from student s
+        join classroom c
+        on s.classroomId = c.id
+
+        where s.name like '%' #{name} '%'
+
+    </select>
+</mapper>

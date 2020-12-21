@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="jdbc.properties"/>
+    <!--
+        设置与数据库交互的环境,设置二级缓存,配置查询延迟加载等(提高效率)
+        在实际开发中,settings基本不使用,效果不明显
+        优化效率:
+            基础操作:对于常用的查询条件的字段,设置索引
+            高级操作:使用nosql数据库,例如redis(缓存数据库)
+            专业操作:搜索引擎 Elasticsearch和Solr
+    -->
+    <!--<settings>
+        <setting name="" value=""/>
+    </settings>-->
+    <!--
+        为mapper映射文件中的domain起别名
+    -->
+    <typeAliases>
+        <!--
+            方式一:为指定的类分别起别名
+            type:为哪个domain起别名,填写包、类名称
+            alias:别名
+        -->
+        <!--<typeAlias type="com.lijienode.domain.Student" alias="stu"/>-->
+        <!--
+            方式二:批量起别名,别名为类名(建议使用)
+        -->
+        <package name="com.lijienode.domain"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!-- 方式一:resource指定映射文件 -->
+        <!--<mapper resource="com/lijienode/dao/StudentDao.xml"/>-->
+        <!-- 方式二:class指定类所在包名 -->
+        <!--<mapper class="com.lijienode.dao.StudentDao"/>-->
+        <!-- 方式三:name指定dao的包,包中的文件自动注册 -->
+        <package name="com.lijienode.dao"/>
+    </mappers>
+</configuration>
